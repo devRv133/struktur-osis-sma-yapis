@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struktur Organisasi OSIS - High Performance</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* -----------------------------------------
+           BASE STYLE & ANIMATED BACKGROUND (OPTIMIZED)
+        ----------------------------------------- */
+        body {
+            background: #0a192f;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .squares-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .squares-bg li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 180, 216, 0.12);
+            border: 1px solid rgba(144, 224, 239, 0.25);
+            border-radius: 8px;
+            bottom: -150px;
+            animation: animateSquare 25s linear infinite;
+            will-change: transform, opacity;
+        }
+
+        .squares-bg li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .squares-bg li:nth-child(2) { left: 10%; width: 30px; height: 30px; animation-delay: 2s; animation-duration: 12s; }
+        .squares-bg li:nth-child(3) { left: 70%; width: 40px; height: 40px; animation-delay: 4s; }
+        .squares-bg li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .squares-bg li:nth-child(5) { left: 65%; width: 25px; height: 25px; animation-delay: 0s; }
+        .squares-bg li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .squares-bg li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+
+        @keyframes animateSquare {
+            0% {
+                transform: translateY(0) rotate(0deg) translateZ(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1200px) rotate(720deg) translateZ(0);
+                opacity: 0;
+            }
+        }
+
+        /* -----------------------------------------
+           PRELOADER SCREEN (ROKET ANIMASI)
+        ----------------------------------------- */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d1b2a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .rocket-container {
+            position: relative;
+            width: 80px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: rocketShake 0.4s ease-in-out infinite alternate;
+        }
+
+        .rocket {
+            position: relative;
+            width: 36px;
+            height: 70px;
+            background: #f8f9fa;
+            border-radius: 50% 50% 20% 20%;
+            border-top: 5px solid #ff4d6d;
+        }
+
+        .rocket::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #00b4d8;
+            border-radius: 50%;
+            border: 2px solid #0d1b2a;
+        }
+
+        .rocket-wing-left, .rocket-wing-right {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            height: 25px;
+            background: #ff4d6d;
+        }
+        .rocket-wing-left {
+            left: -10px;
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+        }
+        .rocket-wing-right {
+            right: -10px;
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+        }
+
+        .rocket-fire {
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 25px;
+            background: linear-gradient(to bottom, #ffb703, #ff4d6d, transparent);
+            border-radius: 0 0 50% 50%;
+            animation: firePulse 0.15s ease-in-out infinite alternate;
+        }
+
+        @keyframes rocketShake {
+            0% { transform: translateY(0px) rotate(-1deg); }
+            100% { transform: translateY(-6px) rotate(1deg); }
+        }
+
+        @keyframes firePulse {
+            0% { height: 20px; opacity: 0.8; }
+            100% { height: 32px; opacity: 1; }
+        }
+
+        .loader-text {
+            margin-top: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #caf0f8;
+            letter-spacing: 1px;
+        }
+
+        #loader-wrapper.loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* -----------------------------------------
+           HEADER & ANIMASI LOGO UTAMA
+        ----------------------------------------- */
+        .school-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            z-index: 1;
+            animation: logoFloat 3s ease-in-out infinite, logoGlow 2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 8px rgba(0, 180, 216, 0.4));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes logoGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(0, 180, 216, 0.3)); }
+            100% { filter: drop-shadow(0 0 15px rgba(0, 180, 216, 0.8)); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            background: #0d1b2a;
+            padding: 10px 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 180, 216, 0.4);
+            z-index: 1;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #caf0f8;
+            margin-bottom: 40px;
+            font-weight: 600;
+            background: #0d1b2a;
+            padding: 6px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 8px;
+            z-index: 1;
+        }
+
+        /* -----------------------------------------
+           STRUKTUR POHON BERCABANG (TREE CHART)
+        ----------------------------------------- */
+        .tree-container {
+            display: flex;
+            justify-content: flex-start; /* Diubah agar scroll mendeteksi dari awal dengan baik */
+            width: 100%;
+            overflow-x: auto;
+            padding: 20px 40px; /* Padding kiri-kanan diperlebar agar seksi pinggir tidak mentok */
+            z-index: 1;
+        }
+
+        .tree-chart, .tree-chart ul, .tree-chart li {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tree-chart {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .tree-chart ul {
+            display: flex;
+            justify-content: center;
+            padding-top: 25px;
+        }
+
+        .tree-chart li {
+            position: relative;
+            padding: 25px 6px 0 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Garis Penghubung Ringan */
+        .tree-chart li::before, .tree-chart li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #00b4d8;
+            width: 50%;
+            height: 25px;
+        }
+
+        .tree-chart li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #00b4d8;
+        }
+
+        .tree-chart li:only-child::after, .tree-chart li:only-child::before { 
+            display: none; 
+        }
+
+        .tree-chart li:only-child { 
+            padding-top: 0; 
+        }
+
+        .tree-chart li:first-child::before, .tree-chart li:last-child::after { 
+            border: 0 none; 
+        }
+
+        .tree-chart li:last-child::before { 
+            border-right: 2px solid #00b4d8; 
+            border-radius: 0 8px 0 0; 
+        }
+
+        .tree-chart li:first-child::after { 
+            border-radius: 8px 0 0 0; 
+        }
+
+        .tree-chart ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #00b4d8;
+            width: 0;
+            height: 25px;
+        }
+
+        /* -----------------------------------------
+           KARTU (UKURAN DIOPTIMALKAN UNTUK 6 SEKSI)
+        ----------------------------------------- */
+        .card {
+            background: #112240;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 10px 8px;
+            width: 140px; /* Dikecilkan sedikit agar muat berdampingan tanpa kepotong ekstrem */
+            text-align: center;
+            position: relative;
+            border-top: 4px solid #00b4d8;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            z-index: 2;
+            will-change: transform;
+        }
+
+        .level-1 > .card { border-top-color: #ff4d6d; }
+        .level-2 > .card { border-top-color: #ffb703; }
+        .level-3 > .card { border-top-color: #06d6a0; }
+        .level-4 > .card { border-top-color: #00b4d8; }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 180, 216, 0.3);
+            border-color: #90e0ef;
+            z-index: 10;
+        }
+
+        .card img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: contain;
+            margin-bottom: 6px;
+            border: 2px solid #00b4d8;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.08);
+        }
+
+        .card .role {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #90e0ef;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .card .name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .card .class-info {
+            font-size: 0.6rem;
+            color: #caf0f8;
+            margin-top: 4px;
+            font-weight: 500;
+            line-height: 1.1;
+        }
+
+        /* -----------------------------------------
+           VISI & MISI SECTION STYLING
+        ----------------------------------------- */
+        .visimisi-container {
+            width: 100%;
+            max-width: 900px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            z-index: 1;
+        }
+
+        .vm-card {
+            background: #112240;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            border-top: 4px solid #ffb703;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .vm-card:hover {
+            border-color: #90e0ef;
+            transform: translateY(-3px);
+        }
+
+        .vm-card.misi-card {
+            border-top-color: #06d6a0;
+        }
+
+        .vm-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #90e0ef;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vm-content {
+            font-size: 0.95rem;
+            color: #caf0f8;
+            line-height: 1.6;
+        }
+
+        .vm-content ol {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vm-content li {
+            color: #ffffff;
+        }
+
+        @media (max-width: 992px) {
+            .card { width: 120px; padding: 6px; }
+            .card img { width: 38px; height: 38px; }
+            .card .name { font-size: 0.7rem; }
+            .card .role { font-size: 0.58rem; }
+            .card .class-info { font-size: 0.55rem; }
+            .visimisi-container { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ANIMASI BACKGROUND KOTAK -->
+    <ul class="squares-bg">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <!-- LOADING SCREEN DENGAN ROKET -->
+    <div id="loader-wrapper">
+        <div class="rocket-container">
+            <div class="rocket">
+                <div class="rocket-wing-left"></div>
+                <div class="rocket-wing-right"></div>
+                <div class="rocket-fire"></div>
+            </div>
+        </div>
+        <div class="loader-text">Meluncurkan Struktur OSIS...</div>
+    </div>
+
+    <!-- LOGO UTAMA DENGAN ANIMASI -->
+    <img src="logo.png" alt="Logo Sekolah" class="school-logo">
+
+    <h1>STRUKTUR ORGANISASI OSIS</h1>
+    <p class="subtitle">SMA / SMK Negeri 1 Contoh - Periode 2024/2025</p>
+
+    <!-- CONTAINER STRUKTUR ORGANISASI -->
+    <div class="tree-container">
+        <div class="tree-chart">
+            <ul>
+                <!-- LEVEL 1: KETUA OSIS -->
+                <li class="level-1">
+                    <div class="card">
+                        <img src="logo.png" alt="Logo OSIS">
+                        <div class="role">Ketua OSIS</div>
+                        <div class="name">Rony</div>
+                        <div class="class-info">Pengurus Inti</div>
+                    </div>
+
+                    <!-- LEVEL 2: WAKIL OSIS -->
+                    <ul>
+                        <li class="level-2">
+                            <div class="card">
+                                <img src="logo.png" alt="Logo OSIS">
+                                <div class="role">Wakil OSIS</div>
+                                <div class="name">Faiz</div>
+                                <div class="class-info">Pengurus Inti</div>
+                            </div>
+
+                            <!-- LEVEL 3: SEKRETARIS & BENDAHARA -->
+                            <ul>
+                                <li class="level-3">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Sekretaris</div>
+                                        <div class="name">Dian Shesna</div>
+                                        <div class="class-info">Pengurus Inti</div>
+                                    </div>
+                                </li>
+
+                                <li class="level-3">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Bendahara</div>
+                                        <div class="name">Eva Putri</div>
+                                        <div class="class-info">Pengurus Inti</div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- LEVEL 4: SEKSI-SEKSI (6 BIDANG) -->
+                            <ul style="padding-top: 35px;">
+                                <!-- Seksi 1 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 1</div>
+                                        <div class="name">Etta & Rahma</div>
+                                        <div class="class-info">Bidang Ketaqwaan</div>
+                                    </div>
+                                </li>
+
+                                <!-- Seksi 2 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 2</div>
+                                        <div class="name">Ragil, Asgar, Nurlela</div>
+                                        <div class="class-info">Wawasan Kebangsaan & Bela Negara</div>
+                                    </div>
+                                </li>
+
+                                <!-- Seksi 3 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 3</div>
+                                        <div class="name">Rosita, Rafa</div>
+                                        <div class="class-info">Keterampilan & Kreativitas</div>
+                                    </div>
+                                </li>
+
+                                <!-- Seksi 4 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 4</div>
+                                        <div class="name">Ayu, Justin</div>
+                                        <div class="class-info">Prestasi Akademik</div>
+                                    </div>
+                                </li>
+
+                                <!-- Seksi 5 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 5</div>
+                                        <div class="name">Samuel, John</div>
+                                        <div class="class-info">Sastra & Budaya</div>
+                                    </div>
+                                </li>
+
+                                <!-- Seksi 6 -->
+                                <li class="level-4">
+                                    <div class="card">
+                                        <img src="logo.png" alt="Logo OSIS">
+                                        <div class="role">Seksi 6</div>
+                                        <div class="name">Afifa, Farel</div>
+                                        <div class="class-info">Pesan, Dokumentasi</div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BAGIAN VISI & MISI -->
+    <div class="visimisi-container">
+        <!-- Visi -->
+        <div class="vm-card">
+            <div class="vm-title">🌟 Visi OSIS</div>
+            <div class="vm-content">
+                Mewujudkan OSIS yang aktif, kreatif, berakhlak mulia, serta unggul dalam prestasi dan berlandaskan semangat kebersamaan di lingkungan sekolah.
+            </div>
+        </div>
+
+        <!-- Misi (3 poin) -->
+        <div class="vm-card misi-card">
+            <div class="vm-title">🚀 Misi OSIS</div>
+            <div class="vm-content">
+                <ol>
+                    <li>Meningkatkan keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa melalui kegiatan keagamaan yang aktif dan konsisten.</li>
+                    <li>Mengembangkan potensi, bakat, serta kreativitas siswa melalui wadah organisasi dan ekstrakurikuler yang berkualitas.</li>
+                    <li>Menjalin keharmonisan, kerja sama, dan solidaritas antar warga sekolah demi menciptakan lingkungan yang disiplin dan kondusif.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader-wrapper');
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 2500);
+        });
+
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            let ticking = false;
+
+            card.addEventListener('mousemove', (e) => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        card.style.transform = `translateY(-4px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg)`;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
