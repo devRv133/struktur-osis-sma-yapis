@@ -225,10 +225,10 @@
         ----------------------------------------- */
         .tree-container {
             display: flex;
-            justify-content: flex-start; /* Diubah agar scroll mendeteksi dari awal dengan baik */
+            justify-content: flex-start;
             width: 100%;
             overflow-x: auto;
-            padding: 20px 40px; /* Padding kiri-kanan diperlebar agar seksi pinggir tidak mentok */
+            padding: 20px 40px;
             z-index: 1;
         }
 
@@ -316,7 +316,7 @@
             border: 1px solid rgba(0, 180, 216, 0.3);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             padding: 10px 8px;
-            width: 140px; /* Dikecilkan sedikit agar muat berdampingan tanpa kepotong ekstrem */
+            width: 140px;
             text-align: center;
             position: relative;
             border-top: 4px solid #00b4d8;
@@ -436,13 +436,69 @@
             color: #ffffff;
         }
 
+        /* -----------------------------------------
+           GALERI KEGIATAN STYLING
+        ----------------------------------------- */
+        .gallery-container {
+            width: 100%;
+            max-width: 900px;
+            margin-top: 40px;
+            z-index: 1;
+        }
+
+        .gallery-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #90e0ef;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background: #112240;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #90e0ef;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 2px solid rgba(0, 180, 216, 0.3);
+            margin-bottom: 12px;
+        }
+
+        .gallery-caption {
+            font-size: 0.85rem;
+            color: #caf0f8;
+            font-weight: 600;
+            padding: 0 10px;
+        }
+
         @media (max-width: 992px) {
             .card { width: 120px; padding: 6px; }
             .card img { width: 38px; height: 38px; }
             .card .name { font-size: 0.7rem; }
             .card .role { font-size: 0.58rem; }
             .card .class-info { font-size: 0.55rem; }
-            .visimisi-container { width: 95%; }
+            .visimisi-container, .gallery-container { width: 95%; }
         }
     </style>
 </head>
@@ -610,6 +666,25 @@
                     <li>Mengembangkan potensi, bakat, serta kreativitas siswa melalui wadah organisasi dan ekstrakurikuler yang berkualitas.</li>
                     <li>Menjalin keharmonisan, kerja sama, dan solidaritas antar warga sekolah demi menciptakan lingkungan yang disiplin dan kondusif.</li>
                 </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- BAGIAN GALERI KEGIATAN OSIS -->
+    <div class="gallery-container">
+        <div class="gallery-header">📸 Galeri Kegiatan OSIS</div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="logo.png" alt="Kegiatan 1">
+                <div class="gallery-caption">Latihan Dasar Kepemimpinan Siswa (LDKS)</div>
+            </div>
+            <div class="gallery-item">
+                <img src="logo.png" alt="Kegiatan 2">
+                <div class="gallery-caption">Pentas Seni & Pameran Kreativitas</div>
+            </div>
+            <div class="gallery-item">
+                <img src="logo.png" alt="Kegiatan 3">
+                <div class="gallery-caption">Upacara Hari Pahlawan & Bakti Sosial</div>
             </div>
         </div>
     </div>
